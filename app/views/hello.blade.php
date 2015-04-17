@@ -91,6 +91,14 @@
                         onFieldChange: function (instance, field) {
                             cl('onFieldChange');
                             cl(field);
+                        },
+                        onActivateEditable: function (instance) {
+                            cl('onActivateEditable');
+                            cl(instance);
+                        },
+                        onDeactivateEditable: function (instance) {
+                            cl('onDeactivateEditable');
+                            cl(instance);
                         }
                     },
                     classes: {
@@ -136,7 +144,9 @@
 
                 if (this.settings.activateOnClick) {
                     this.elems.editables.click(function () {
-                        _this.activateEditable($(this));
+                        if (!$(this).hasClass(_this.settings.classes.activeEditable)) {
+                            _this.activateEditable($(this));
+                        }
                     });
                 }
                 ;
@@ -163,10 +173,12 @@
             activateEditable: function (inFocus) {
                 this.showInputs(inFocus);
                 this.addActiveEditableClass();
+                this.settings.callbacks.onActivateEditable(this);
             },
             deActivateEditable: function () {
                 this.hideInputs();
                 this.removeActiveEditableClass();
+                this.settings.callbacks.onDeactivateEditable(this);
             },
             showInputs: function (inFocus) {
                 var _this = this;
