@@ -58,11 +58,8 @@
         console.log(msg);
     }
     $(function () {
-        $(".inline-editable-row").defaultPluginName();
+        $(".inline-editable-row").inlineEditable();
 
-//        $(".inline-editable-row").each(function (i,e) {
-//            e.data('plugin_defaultPluginName');
-//        });
     });
 
 </script>
@@ -82,18 +79,20 @@
         // minified (especially when both are regularly referenced in your plugin).
 
         // Create the defaults once
-        var pluginName = "defaultPluginName",
+        var pluginName = "inlineEditable",
                 defaults = {
                     trigger: ".dv-edit-trigger",
                     activateOnClick: true,
                     editable: ".dv-editable",
                     callbacks: {
                         onFieldChange: function (instance, field) {
-//                            cl('onFieldChange');
-//                            cl(field);
+                            cl('onFieldChange');
+                            cl(field);
+                            cl(instance.getEditable());
+
                         },
                         onActivateEditable: function (instance) {
-//                            cl('onActivateEditable');
+                            cl('onActivateEditable');
 //                            cl(instance);
                         },
                         onDeactivateEditable: function (instance) {
@@ -289,6 +288,9 @@
             },
             getInputElem: function (editableElem) {
                 return $(editableElem).find('.' + this.settings.classes.inline_editable)
+            },
+            getEditable:function(){
+                return this.element;
             }
 
         });
@@ -297,8 +299,8 @@
         // preventing against multiple instantiations
         $.fn[pluginName] = function (options) {
             return this.each(function () {
-                if (!$.data(this, "plugin_" + pluginName)) {
-                    $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+                if (!$.data(this, pluginName)) {
+                    $.data(this, pluginName, new Plugin(this, options));
                 }
             });
         };
