@@ -89,16 +89,16 @@
                     editable: ".dv-editable",
                     callbacks: {
                         onFieldChange: function (instance, field) {
-                            cl('onFieldChange');
-                            cl(field);
+//                            cl('onFieldChange');
+//                            cl(field);
                         },
                         onActivateEditable: function (instance) {
-                            cl('onActivateEditable');
-                            cl(instance);
+//                            cl('onActivateEditable');
+//                            cl(instance);
                         },
                         onDeactivateEditable: function (instance) {
                             cl('onDeactivateEditable');
-                            cl(instance);
+//                            cl(instance);
                         }
                     },
                     classes: {
@@ -134,7 +134,6 @@
                 var _this = this;
 
                 this.attachInputs();
-                this.bindBlurEvent();
                 this.bindChangeEvent();
                 this.bindKeyPressEvent();
 
@@ -178,6 +177,7 @@
             deActivateEditable: function () {
                 this.hideInputs();
                 this.removeActiveEditableClass();
+                this.unBindBlurEvent();
                 this.settings.callbacks.onDeactivateEditable(this);
             },
             showInputs: function (inFocus) {
@@ -217,14 +217,28 @@
             bindBlurEvent: function () {
                 var _this = this;
                 $.each(this.elems.inputs, function (i, e) {
-                    e.blur(function (e) {
+                    e.on('blur',function (e) {
                         if ($(e.relatedTarget).hasClass(_this.settings.classes.inline_editable)) {
                             e.preventDefault();
                             return;
                         }
+                        _this.unBindBlurEvent();
                         _this.deActivateEditable();
                     });
                 });
+
+                // $('.inline-edit').on('blur',function(){
+                //     _this.deActivateEditable();
+                //     $('.inline-edit').off('blur');
+                // });
+            },
+            unBindBlurEvent: function () {
+                $('.'+this.settings.classes.inline_editable).off('blur');
+                // var _this = this;
+                // $.each(this.elems.inputs, function (i, e) {
+                //     e.off('blur');
+                //     cl('dsd');
+                // });
             },
             bindChangeEvent: function () {
                 var _this = this;

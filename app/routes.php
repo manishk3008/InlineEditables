@@ -13,6 +13,6 @@
 
 Route::get('/', function()
 {
-	Redirect::back();
+	// Redirect::back();
 	return View::make('hello');
 });
